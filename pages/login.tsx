@@ -1,9 +1,9 @@
-import {signIn, signOut, useSession} from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import React from "react";
 
 const login = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const {data: session} = useSession();
+  const { data: session } = useSession();
   console.log(session);
 
   if (session) {
