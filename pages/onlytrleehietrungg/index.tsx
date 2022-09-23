@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Landing = () => {
+const ChillingWithMe = () => {
     return (
         <div className='main'>
             <video src='https://video.wixstatic.com/video/fe5385_9f011cd1aa2a4bbfa6903ac7a1804dde/1080p/mp4/file.mp4'
@@ -35,4 +35,4 @@ const Landing = () => {
     )
 }
 
-export default Landing  
+export default ChillingWithMe  
