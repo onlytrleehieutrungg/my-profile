@@ -4,7 +4,7 @@ import Cookies from "universal-cookie";
 import {constant} from "../constant";
 
 const request = axios.create({
-  baseURL: process.env.LOCAL_BASE_URL,
+  baseURL: process.env.SPOTIFY_BASE_URL,
   withCredentials: true,
 });
 

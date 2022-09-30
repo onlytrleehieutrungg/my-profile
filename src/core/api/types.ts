@@ -3,3 +3,6 @@ export interface IGenericResponse {
     message: string;
   }
   
+export interface Search {
+    searchValue: string;
+};
