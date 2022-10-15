@@ -29,9 +29,9 @@ const ChillingWithMe = () => {
     const [searchValue, setSearchValue] = useState<any[]>()
     const [playingTrack, setPlayingTrack] = useState<any>()
     const [lyrics, setLyrics] = useState<string>()
-
     const methods = useForm<Search>({ defaultValues });
     const watchSearch = methods.watch("searchValue");
+    const [showIntro, setShowIntro] = useState<boolean>(true)
     function chooseTrack(track: any) {
         setPlayingTrack(track)
         setSearch('')
@@ -41,7 +41,7 @@ const ChillingWithMe = () => {
     useEffect(() => {
         if (!playingTrack) return
         axios
-            .get("http://localhost:3001/lyrics", {
+            .get("http://54.199.112.38:3001/lyrics", {
                 params: {
                     track: playingTrack.title,
                     artist: playingTrack.artist,
@@ -51,7 +51,6 @@ const ChillingWithMe = () => {
                 setLyrics(res.data.lyrics)
             })
     }, [playingTrack])
-    console.log(lyrics);
 
     useEffect(() => {
         if (!accessToken) {
@@ -59,10 +58,14 @@ const ChillingWithMe = () => {
         }
         spotifyApi.setAccessToken(accessToken!)
     }, [accessToken])
+
     useEffect(() => {
+        if (watchSearch === '') setShowIntro(true)
+        else setShowIntro(false)
         setSearch(watchSearch)
         setLyrics("")
     }, [watchSearch])
+
     useEffect(() => {
         if (!accessToken) {
             return
@@ -83,7 +86,7 @@ const ChillingWithMe = () => {
                     artist: track.artists[0].name,
                     title: track.name,
                     uri: track.uri,
-                    albumUrl: smallestAlbumImage.url
+                    albumUrl: smallestAlbumImage?.url
                 }
             }))
 
@@ -105,7 +108,7 @@ const ChillingWithMe = () => {
                     muted
                 />
                 <div className='content'>
-                    <div className="contact p-3 bg-black bg-opacity-75 flex items-center justify-center">
+                    <div className="contact p-3 flex items-center justify-center">
                         <div className="container max-w-screen-lg mx-auto">
                             <div className="flex flex-wrap justify-center gap-2">
                                 <h2 className='inline-flex items-center text-2xl text-zinc-200'>Follow me</h2>
@@ -125,30 +128,28 @@ const ChillingWithMe = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="spotify-button bg-black bg-opacity-0">
+                    <div className="spotify-button">
                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" className="bi bi-spotify" viewBox="0 0 16 16">
                             <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.669 11.538a.498.498 0 0 1-.686.165c-1.879-1.147-4.243-1.407-7.028-.77a.499.499 0 0 1-.222-.973c3.048-.696 5.662-.397 7.77.892a.5.5 0 0 1 .166.686zm.979-2.178a.624.624 0 0 1-.858.205c-2.15-1.321-5.428-1.704-7.972-.932a.625.625 0 0 1-.362-1.194c2.905-.881 6.517-.454 8.986 1.063a.624.624 0 0 1 .206.858zm.084-2.268C10.154 5.56 5.9 5.419 3.438 6.166a.748.748 0 1 1-.434-1.432c2.825-.857 7.523-.692 10.492 1.07a.747.747 0 1 1-.764 1.288z" />
                         </svg>
-                        <div className="pl-4">
+                        <div className="pl-4 z-120">
                             <Link href={AUTH_URL} >Login</Link>
                         </div>
                     </div>
-
-                    <div className="main-text">
+                    {accessToken ? <div className="main-text">
                         <form className="flex items-center" onSubmit={methods.handleSubmit(_handleOnSubmit)}>
                             <label className="sr-only">Search</label>
-                            <div className="relative w-full">
+                            <div className="">
                                 <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                                     <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
                                 </div>
                                 <TextField name={'searchValue'} label={'Any song...'} />
                             </div>
-                            <button type="submit" className="inline-flex items-center py-2.5 px-3 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"><svg className="mr-2 -ml-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>Search</button>
+                            <button type="submit" className="inline-flex items-center py-2.5 px-3 ml-2 text-sm font-medium text-white bg-transparent rounded-lg border border-gray-400 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 ">Search</button>
                         </form>
+                    </div> : ""}
 
-                    </div>
-                    <Introduce classname='' />
-                    {lyrics ? <div className='lyrics-box absolute top-16 px-24'>
+                    {showIntro ? <Introduce classname='introduce' /> : lyrics ? <div className='lyrics-box absolute top-16 px-24'>
                         <div className='lyric'>{lyrics}</div></div> : <div className='grid grid-cols-4 gap-8 absolute flex top-24 px-16'>
                         {searchValue?.map(track => <div key={track.uri}><TrackSearchResult classname={"nc-Card11"} track={track} chooseTrack={chooseTrack} /></div>)}
                     </div>}

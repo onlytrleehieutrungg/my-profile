@@ -5,6 +5,8 @@ interface IntroduceProps {
 
 export const Introduce: React.FC<IntroduceProps> = ({ classname }) => {
     return (
-        <div className={`${classname} absolute flex top-20 text-white`}>astronaut vibes</div>
+        <div className='absolute flex top-0 h-full w-full justify-center items-center'>
+            <div className={`${classname}`}>astronaut vibes</div>
+        </div>
     )
 }
