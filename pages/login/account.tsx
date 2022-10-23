@@ -24,16 +24,16 @@ const account = () => {
 
 export default account;
 
-export const getServerSideProps = async (context: any) => {
-  const session = await getSession(context);
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/login",
-      },
-    };
-  }
-  return {
-    props: session,
-  };
-};
+// export const getServerSideProps = async (context: any) => {
+//   const session = await getSession(context);
+//   if (!session) {
+//     return {
+//       redirect: {
+//         destination: "/login",
+//       },
+//     };
+//   }
+//   return {
+//     props: session,
+//   };
+// };

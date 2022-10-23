@@ -1,7 +1,7 @@
 import { TNUtils } from 'swd-mono-react-ui';
 import * as React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { useStoreApi } from '../../../src/core/store';
+import { useStoreApi } from '../../../core/store';
 
 interface FormErrorMessageProps {
     name: string;
@@ -9,7 +9,7 @@ interface FormErrorMessageProps {
     label: string;
 }
 
-export const FormErrorMessage: React.FC<FormErrorMessageProps> = ({ name, label, className }) => {
+const FormErrorMessage: React.FC<FormErrorMessageProps> = ({ name, label, className }) => {
     const { errorDetails } = useStoreApi();
     const [errorMessage, setErrorMessage] = React.useState('');
     React.useEffect(() => {
@@ -30,3 +30,5 @@ export const FormErrorMessage: React.FC<FormErrorMessageProps> = ({ name, label,
         </>
     );
 };
+
+export default FormErrorMessage

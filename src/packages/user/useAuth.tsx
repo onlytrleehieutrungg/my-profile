@@ -7,7 +7,7 @@ export default function useAuth(code: any) {
     const [expiresIn, setExpiresIn] = useState<number>();
     var location: Location | string
     useEffect(() => {
-        axios.post('http://54.199.112.38:3001/login', {
+        axios.post('http://localhost:3001/login', {
             code,
         })
             .then(res => {
@@ -23,7 +23,7 @@ export default function useAuth(code: any) {
     useEffect(() => {
         if (!refreshToken || !expiresIn) return
         const interval = setInterval(() => {
-            axios.post('http://54.199.112.38:3001/refresh', {
+            axios.post('http://localhost:3001/refresh', {
                 refreshToken,
             })
                 .then(res => {

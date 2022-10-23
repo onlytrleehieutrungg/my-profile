@@ -4,7 +4,7 @@ interface PlayerProps {
     accessToken: any
     trackUri: string
 }
-export const Player: React.FC<PlayerProps> = ({ accessToken, trackUri }) => {
+const Player: React.FC<PlayerProps> = ({ accessToken, trackUri }) => {
     const [play, setPlay] = useState(false);
     useEffect(() => {
         setPlay(true)
@@ -32,3 +32,5 @@ export const Player: React.FC<PlayerProps> = ({ accessToken, trackUri }) => {
         </div>
     )
 }
+
+export default Player
