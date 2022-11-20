@@ -26,7 +26,6 @@ const Player: React.FC<PlayerProps> = ({ accessToken, trackUri }) => {
                 showSaveIcon
                 callback={state => { if (!state.isPlaying) setPlay(true) }}
                 play={play}
-                // autoPlay={play}
                 uris={trackUri ? [trackUri] : []}
             />
         </div>

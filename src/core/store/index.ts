@@ -3,6 +3,7 @@ import counterReducer, {CounterState} from "./counter";
 import {userReducer, UserState} from "../store/user/";
 import {useSelector} from "react-redux";
 import {apiReducer, ApiState} from "../store/api";
+import {SpotifyState} from "./spotify";
 export interface RootState {
   api: ApiState;
   user: UserState;
@@ -30,3 +31,4 @@ export const useStoreCounter = () =>
 export * from "./api";
 export * from "./user";
 export * from "./counter";
+export * from "./spotify";

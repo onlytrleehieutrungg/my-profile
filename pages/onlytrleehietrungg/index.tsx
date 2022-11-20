@@ -3,14 +3,12 @@ import React, { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { Search } from '../../src/core/api/types'
 import useAuth from '../../src/packages/user/useAuth'
-import Login from '../login/login'
 import SpotifyWebApi from 'spotify-web-api-node'
 import Link from 'next/link'
 import axios from 'axios'
 import TrackSearchResult from '../../src/packages/onlytrleehietrungg/components/TrackSearchResult'
 import Player from '../../src/packages/onlytrleehietrungg/components/player'
 import TextField from '../../src/packages/onlytrleehietrungg/components/textField'
-import Introduce from '../../src/packages/onlytrleehietrungg/containers/introduce'
 const defaultValues: Search = {
     searchValue: ''
 }
@@ -38,19 +36,17 @@ const ChillingWithMe = () => {
         setLyrics('')
     }
 
-
     useEffect(() => {
         if (!playingTrack) return
-        axios
-            .get("http://localhost:3001/lyrics", {
-                params: {
-                    track: playingTrack.title,
-                    artist: playingTrack.artist,
-                },
-            })
-            .then(res => {
-                setLyrics(res.data.lyrics)
-            })
+        const lyrics =
+            axios
+                .get("http://localhost:3001/lyrics", {
+                    params: {
+                        track: playingTrack.title,
+                        artist: playingTrack.artist,
+                    },
+                })
+        console.log(lyrics);
     }, [playingTrack])
 
     useEffect(() => {
@@ -150,7 +146,6 @@ const ChillingWithMe = () => {
                                 </div>
                                 <TextField name={'searchValue'} label={'Any song...'} />
                             </div>
-                            {/* <button type="submit" className="inline-flex items-center py-2.5 px-3 ml-2 text-sm font-medium text-white bg-transparent rounded-lg border border-gray-400 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 ">Search</button> */}
                         </form>
                     </div> : ""}
 
