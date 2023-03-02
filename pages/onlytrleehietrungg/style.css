@@ -9,8 +9,6 @@
     height: 100vh;
    
   }
-
-
   
   .video-bg {
     width: 100%;
@@ -18,34 +16,54 @@
     object-fit: cover;
   } 
 
-  .content .PlayerRSWP{
-    width: 100vw;
-    /* max-width: 1440px; */
+  .content{
+    justify-content: center;
   }
   .contact{
     z-index: 99;
     position: absolute;
-    top: 0;
+    top: 60%;
+    margin-left: 11em;
     letter-spacing: 0.1em;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    animation-name: example;
-    animation-duration: 5s;
+    justify-content: left;
+    animation-name: toptodown;
+    animation-duration: 4s;
+  }
 
+  .spotify-button{
+    position: absolute;
+    display: flex;
+    z-index: 99;
+    padding: 0.5em 1em;
+    color: white;
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://fonts.gstatic.com/s/nunito/v25/XRXI3I6Li01BKofiOc5wtlZ2di8HDLshdTs3j6zbXWjgevT5.woff2) format('woff2');
+    unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+1EA0-1EF9, U+20AB;
+    font-size: 2em;
+    letter-spacing: 0.2em;
+    flex-direction: row;
+    justify-content: right;
+
+    top: 0;
+    animation-name: lefttoright;
+    animation-duration: 5s;
+    right: 0;
   }
   @keyframes example {
-    from {transform: translateX(-120%);}
-    to {transform: translateX(0); }
+    from {transform: translateX(-740%);}
+    to {transform: translateX(-500%); }
   }
   @keyframes lefttoright {
     from {transform: translateX(120%);}
     to {transform: translateX(0); }
   }
   @keyframes toptodown {
-    from {transform: translateY(1000%);}
-    to {transform: translateY(-120%); }
+    from {transform: translateY(700%);}
+    to {transform: translateY(-20%); }
   }
   .main-text {
     position: absolute;
@@ -73,27 +91,7 @@
     src: url(https://fonts.gstatic.com/s/nunito/v25/XRXI3I6Li01BKofiOc5wtlZ2di8HDLshdTs3j6zbXWjgevT5.woff2) format('woff2');
     unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+1EA0-1EF9, U+20AB;
   }
-  .spotify-button{
-    position: absolute;
-    display: flex;
-    z-index: 99;
-    padding: 0.5em 1em;
-    color: white;
-    font-family: 'Nunito';
-    font-style: normal;
-    font-weight: 400;
-    src: url(https://fonts.gstatic.com/s/nunito/v25/XRXI3I6Li01BKofiOc5wtlZ2di8HDLshdTs3j6zbXWjgevT5.woff2) format('woff2');
-    unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+1EA0-1EF9, U+20AB;
-    font-size: 2em;
-    letter-spacing: 0.2em;
-    flex-direction: row;
-    justify-content: right;
-    align-items: center;
-    top: 0;
-    animation-name: lefttoright;
-    animation-duration: 5s;
-    right: 0;
-  }
+
   .nc-Card11{
     border-radius: 16px;
     z-index: 99;
@@ -111,6 +109,7 @@
   }
 
   .meimage{
+
     max-height: 100vh;
     max-width: 100%;
     top: 20px;
