@@ -65,7 +65,7 @@
     from {transform: translateY(700%);}
     to {transform: translateY(-20%); }
   }
-  .main-text {
+  .input {
     position: absolute;
     display: flex;
     z-index: 99;

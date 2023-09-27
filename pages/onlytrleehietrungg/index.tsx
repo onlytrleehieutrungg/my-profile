@@ -1,14 +1,15 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { Search } from '../../src/core/api/types'
-import useAuth from '../../src/packages/user/useAuth'
 import SpotifyWebApi from 'spotify-web-api-node'
 import Link from 'next/link'
 import axios from 'axios'
-import TrackSearchResult from '../../src/packages/onlytrleehietrungg/components/TrackSearchResult'
-import Player from '../../src/packages/onlytrleehietrungg/components/player'
+
+import { buffer } from 'node:stream/consumers'
+import { sbApi } from '../../src/utils/landing/api'
 import TextField from '../../src/packages/onlytrleehietrungg/components/textField'
+
 const defaultValues: Search = {
     searchValue: ''
 }
@@ -19,81 +20,26 @@ const spotifyApi = new SpotifyWebApi({
     clientId: "8894f18801774d2b8cbfa00a6d5febb6",
     // clientSecret: "48dc64062afd4c4a82635a278d12fa4e"
 })
+
 const ChillingWithMe = () => {
-    const router = useRouter()
-    const { code } = router.query
-    const accessToken = useAuth(code)
-    const [search, setSearch] = useState<string>()
-    const [searchValue, setSearchValue] = useState<any[]>()
-    const [playingTrack, setPlayingTrack] = useState<any>()
-    const [lyrics, setLyrics] = useState<string>()
+    // const { register } = useFormContext();
+    const [input, setInput] = useState<any>();
+    const [sbImg, setSbImg] = useState<string>();
+
     const methods = useForm<Search>({ defaultValues });
     const watchSearch = methods.watch("searchValue");
-    const [showIntro, setShowIntro] = useState<boolean>(true)
-    function chooseTrack(track: any) {
-        setPlayingTrack(track)
-        setSearch('')
-        setLyrics('')
+    console.log(watchSearch);
+    // useEffect(() => {
+    //     let blob = new Blob([input], { type: 'image/png' });
+    //     let imageUrl = URL.createObjectURL(blob);
+    //     setSbImg(imageUrl)
+    // }, [input])
+
+    const submit = async () => {
+        const res = sbApi(watchSearch);
+        console.log(res);
+        // setInput(await res)
     }
-
-    useEffect(() => {
-        if (!playingTrack) return
-        const lyrics =
-            axios
-                .get("http://localhost:3001/lyrics", {
-                    params: {
-                        track: playingTrack.title,
-                        artist: playingTrack.artist,
-                    },
-                })
-        console.log(lyrics);
-    }, [playingTrack])
-
-    useEffect(() => {
-        if (!accessToken) {
-            return
-        }
-        spotifyApi.setAccessToken(accessToken!)
-    }, [accessToken])
-
-    useEffect(() => {
-        if (watchSearch === '') setShowIntro(true)
-        else setShowIntro(false)
-        setSearch(watchSearch)
-        setLyrics("")
-    }, [watchSearch])
-
-    useEffect(() => {
-        if (!accessToken) {
-            return
-        }
-        if (!search) {
-            return
-        }
-        spotifyApi.searchTracks(search).then(res => {
-            setSearchValue(res.body.tracks?.items.map(track => {
-                const smallestAlbumImage = track.album.images.reduce(
-                    (smallest, image) => {
-                        if (image.height! < smallest.height!) return image
-                        return smallest
-                    },
-                    track.album.images[0]
-                )
-                return {
-                    artist: track.artists[0].name,
-                    title: track.name,
-                    uri: track.uri,
-                    albumUrl: smallestAlbumImage?.url
-                }
-            }))
-
-        })
-
-    }, [accessToken, search])
-
-    const _handleOnSubmit = async (input: Search) => {
-        setSearch(input.searchValue)
-    };
 
 
     return (
@@ -129,43 +75,31 @@ const ChillingWithMe = () => {
                             </div>
                         </div>
                     </div>
-                    {/* <div className="spotify-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" className="bi bi-spotify" viewBox="0 0 16 16">
-                            <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.669 11.538a.498.498 0 0 1-.686.165c-1.879-1.147-4.243-1.407-7.028-.77a.499.499 0 0 1-.222-.973c3.048-.696 5.662-.397 7.77.892a.5.5 0 0 1 .166.686zm.979-2.178a.624.624 0 0 1-.858.205c-2.15-1.321-5.428-1.704-7.972-.932a.625.625 0 0 1-.362-1.194c2.905-.881 6.517-.454 8.986 1.063a.624.624 0 0 1 .206.858zm.084-2.268C10.154 5.56 5.9 5.419 3.438 6.166a.748.748 0 1 1-.434-1.432c2.825-.857 7.523-.692 10.492 1.07a.747.747 0 1 1-.764 1.288z" />
-                        </svg>
-                        <div className="pl-4 z-120">
-                            <Link href={AUTH_URL} >Login</Link>
-                        </div>
-                    </div> */}
-                    {accessToken ? <div className="main-text">
-                        <form className="flex items-center" onSubmit={methods.handleSubmit(_handleOnSubmit)}>
-                            <label className="sr-only">Search</label>
-                            <div className="">
-                                <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                    <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
-                                </div>
-                                <TextField name={'searchValue'} label={'Any song...'} />
-                            </div>
-                        </form>
-                    </div> : ""}
 
-                    {showIntro ?
-                        <img src="me.png" className='meimage absolute top-24 px-24' />
-                        : lyrics ?
-                            <div className='lyrics-box absolute px-24'>
-                                <div className='lyric'>{lyrics}</div>
-                            </div> :
-                            <div className='grid grid-cols-4 gap-8 absolute flex top-24 px-16'>
-                                {searchValue?.map(track =>
-                                    <div key={track.uri}>
-                                        <TrackSearchResult classname={"nc-Card11"} track={track} chooseTrack={chooseTrack} />
-                                    </div>)}
+                    <div className="input" >
+                        <form onSubmit={submit}>
+                            <label htmlFor="search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <svg aria-hidden="true" className="w-10 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                </div>
+                                <input
+                                    // {...register("searchValue")}
+                                    type={"text"}
+                                    className="block w-full pl-10 pr-20 py-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search" required />
                             </div>
-                    }
-                    <div className='absolute flex bottom-0'><Player accessToken={accessToken} trackUri={playingTrack?.uri} /></div>
+                            <button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+                        </form>
+                    </div>
+
                 </div>
+
+
+                <img src="me.png" className='meimage absolute top-24 px-24' />
+
             </div>
-        </FormProvider>
+
+        </FormProvider >
     )
 }
 

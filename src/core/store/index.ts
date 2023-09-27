@@ -21,12 +21,12 @@ export const store = configureStore({
   middleware: getDefaultMiddleware => getDefaultMiddleware({}).concat([]),
 });
 
-export const useStoreApi = () =>
-  useSelector<RootState, ApiState>(state => state.api);
-export const useStoreUser = () =>
-  useSelector<RootState, UserState>(state => state.user);
-export const useStoreCounter = () =>
-  useSelector<RootState, CounterState>(state => state.counter);
+// export const useStoreApi = () =>
+//   useSelector<RootState, ApiState>(state => state.api);
+// export const useStoreUser = () =>
+//   useSelector<RootState, UserState>(state => state.user);
+// export const useStoreCounter = () =>
+//   useSelector<RootState, CounterState>(state => state.counter);
 
 export * from "./api";
 export * from "./user";
